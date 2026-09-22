@@ -5,8 +5,13 @@ version: 0.2
 # the build output (www/), not the repo root.
 phases:
   install:
-    runtime-versions:
-      nodejs: 20
+    commands:
+      # CodeBuild's runtime-versions nodejs selector only offers older majors
+      # than this Angular version requires (>=22.22.3), so install a current
+      # Node via NodeSource instead.
+      - curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+      - apt-get install -y nodejs
+      - node --version
   build:
     commands:
       - npm ci
