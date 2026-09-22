@@ -1,0 +1,17 @@
+version: 0.2
+# Static Ionic/Angular build. LEO's S3 "Deploy" pipeline stage extracts this
+# build artifact directly into the frontend's S3 bucket root (CloudFront's
+# DefaultRootObject is index.html), so the artifact's base-directory must be
+# the build output (www/), not the repo root.
+phases:
+  install:
+    runtime-versions:
+      nodejs: 20
+  build:
+    commands:
+      - npm ci
+      - npm run build
+artifacts:
+  base-directory: www
+  files:
+    - "**/*"
